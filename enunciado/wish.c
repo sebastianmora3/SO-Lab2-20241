@@ -7,7 +7,7 @@
 #include <sys/wait.h> // waitpid
 #include <sys/types.h> // pid_t
 
-// Function prototypes
+
 void execute_command(char *command, char *args[]);
 void handle_builtin_command(char *command, char *args[]);
 void execute_line(char *line);
@@ -31,13 +31,10 @@ void execute_command(char *command, char *args[]) {
         printError();
         exit(EXIT_FAILURE);
     } else if (pid == 0) {
-        // Child process
         execvp(command, args);
-        // If execvp returns, it must have failed
         printError();
         exit(EXIT_FAILURE);
     } else {
-        // Parent process
         int status;
         waitpid(pid, &status, 0);
     }
@@ -66,7 +63,6 @@ void execute_line(char *line) {
     char *args[MAX_ARGS];
     char *token;
 
-    // Parse the command line
     int i = 0;
     token = strtok(line, " \t\n");
     while (token != NULL && i < MAX_ARGS - 1) {
@@ -76,10 +72,9 @@ void execute_line(char *line) {
     args[i] = NULL;
 
     if (i == 0) {
-        return; // Empty command line
+        return; 
     }
 
-    // Check if it's a built-in command
     for (int j = 0; j < sizeof(builtin_commands) / sizeof(char *); j++) {
         if (strcmp(args[0], builtin_commands[j]) == 0) {
             handle_builtin_command(args[0], args);
@@ -87,9 +82,8 @@ void execute_line(char *line) {
         }
     }
 
-    // If not a built-in command, check if executable in path
     for (int j = 0; j < num_paths; j++) {
-        char path[strlen(paths[j]) + strlen(args[0]) + 2]; // +2 for / and null terminator
+        char path[strlen(paths[j]) + strlen(args[0]) + 2]; 
         strcpy(path, paths[j]);
         strcat(path, "/");
         strcat(path, args[0]);
@@ -117,7 +111,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Initialize paths with default /bin
     paths[0] = "/bin";
     paths[1] = NULL;
     num_paths = 1;
@@ -129,9 +122,9 @@ int main(int argc, char *argv[]) {
     if (argc == 1) {
         while (1) {
             printf("wish> ");
-            fflush(stdout); // Asegura que el prompt se imprima antes de leer la entrada
+            fflush(stdout); 
             if ((read = getline(&line, &line_size, input_file)) == -1) {
-                break; // Sal del bucle si hay un error o se alcanza el final de archivo
+                break; 
             }
             execute_line(line);
         }
