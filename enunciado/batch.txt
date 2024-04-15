@@ -1,0 +1,13 @@
+@echo off
+
+rem Crear una carpeta llamada "mi_carpeta"
+mkdir mi_carpeta
+
+rem Cambiar al directorio creado
+cd mi_carpeta
+
+rem Crear un archivo de texto llamado "mi_archivo.txt" con contenido "Hola mundo"
+echo Hola mundo > mi_archivo.txt
+
+rem Mensaje de confirmación
+echo ¡Carpeta y archivo creados correctamente!
